@@ -9,7 +9,14 @@ display = pyfiglet.figlet_format("CyOOC" "\n""Port Scanner")
 print(display)
 
 #User Input for target IP address 
+print("Select your scan type: ")
+print("[#] Select 1 for 1 - 1024 (well-known ports)")
+print("[#] Select 2 for 1 - 65535 port scaning")
+mode = int(input("[+] Select any option: "))
+print()
+
 ip= input(str("Target IP: "))
+
 
 # Display a Banner with a timestap of when the scan started 
 print("#" * 100)
@@ -19,24 +26,45 @@ print("#" * 100)
 
 #Script to detect open ports on target
 
-try:
-    #Scan ports
-    for port in range(1,65535):
-        # Tells python we will be using Ipv4
-        sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        #sets timeout in seconds (*must use a float value) - Values set to 0.1 t speed scan results
-        socket.setdefaulttimeout(0.1)
+if mode == 1:
+    try:
+        # Scan ports
+        for port in range(1, 65536):  # Changed the range to include port 65535
+            # Tells Python we will be using IPv4
+            sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # Sets timeout in seconds (*must use a float value) - Values set to 0.1 for speed scan results
+            socket.setdefaulttimeout(0.1)
 
-        #If connection to open port is succesful (Ex: ==0) will Display open port to user
-        result =  sckt.connect_ex((ip,port))
-        if result == 0:
-            print("[-] Port {} is open".format(port))
-        #Closes connection and continious to next port
+            # If connection to open port is successful (Ex: ==0), display open port to the user
+            result = sckt.connect_ex((ip, port))
+            if result == 0:
+                print("[+] Port {} is open".format(port))
+        
+        print("Scanning complete\n" + str(datetime.now()))
+
+    except KeyboardInterrupt:
+        print("[-] Scan interrupted by user")
+    except socket.error:
+        print("[-] Host seems down.......")
+    finally:
+        # Close the connection at the end of the scan
         sckt.close()
+if mode == 2:
+    try:
+        # Scan ports
+        for port in range(1, 1024):  # Changed the range to include port 1024
+            sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            socket.setdefaulttimeout(0.1)
 
-except KeyboardInterrupt:
-        print("\n .......Closing Program ......")
-        sys.exit()
-except socket.error:
-        print("\n .....Host is not up ......")
-        sys.exit()
+            result = sckt.connect_ex((ip, port))
+            if result == 0:
+                print("[+] Port {} is open".format(port))
+        
+        print("Scanning complete\n" + str(datetime.now()))
+
+    except KeyboardInterrupt:
+        print("[-] Scan interrupted by user")
+    except socket.error:
+        print("[-] Host seems down.......")
+    finally:
+        sckt.close()
