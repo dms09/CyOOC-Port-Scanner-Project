@@ -52,7 +52,7 @@ if mode == 1:
 if mode == 2:
     try:
         # Scan ports
-        for port in range(1, 1024):  # Changed the range to include port 1024
+        for port in range(1, 1024):  # Changed the range to port 1024
             sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             socket.setdefaulttimeout(0.1)
 
