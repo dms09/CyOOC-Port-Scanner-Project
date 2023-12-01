@@ -8,7 +8,7 @@ from datetime import datetime
 display = pyfiglet.figlet_format("CyOOC" "\n""Port Scanner")
 print(display)
 
-#User Input for target IP address 
+#User Input for target IP address and Scan option
 print("Select your scan type: ")
 print("[#] Select 1 for 1 - 1024 (well-known ports)")
 print("[#] Select 2 for 1 - 65535 port scaning")
